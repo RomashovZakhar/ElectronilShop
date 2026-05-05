@@ -10,7 +10,7 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, verbose_name='Slug')
-    
+
     class Meta:
         ordering = ['name']
         indexes = [
@@ -18,10 +18,10 @@ class Category(models.Model):
         ]
         verbose_name = 'категория'
         verbose_name_plural = 'категории'
-    
+
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         """Возвращает URL для отображения категории"""
         return reverse('store:category_list', args=[self.slug])
@@ -32,8 +32,8 @@ class Product(models.Model):
     Модель товара.
     Содержит всю информацию о товаре: название, описание, цену, изображение и т.д.
     """
-    category = models.ForeignKey(Category, related_name='products', 
-                                on_delete=models.CASCADE, verbose_name='Категория')
+    category = models.ForeignKey(Category, related_name='products',
+                                 on_delete=models.CASCADE, verbose_name='Категория')
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, verbose_name='Slug')
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True, verbose_name='Изображение')
@@ -42,7 +42,7 @@ class Product(models.Model):
     available = models.BooleanField(default=True, verbose_name='Доступен')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
-    
+
     class Meta:
         ordering = ['name']
         indexes = [
@@ -52,14 +52,14 @@ class Product(models.Model):
         ]
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
-    
+
     def __str__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         """Возвращает URL для отображения товара"""
         return reverse('store:product_detail', args=[self.id, self.slug])
-    
+
     def save(self, *args, **kwargs):
         """Автоматически создает slug из названия при сохранении"""
         if not self.slug:

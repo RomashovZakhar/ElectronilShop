@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from store.models import Category, Product
+from store.models import Product
 
 
 @pytest.mark.django_db
@@ -38,10 +38,10 @@ class TestProductListView:
         assert 'categories' in response.context
 
     def test_only_available_shown(self, client, category):
-        visible = Product.objects.create(
+        Product.objects.create(
             category=category, name='Видимый', slug='vidimyj', price='1000.00', available=True
         )
-        hidden = Product.objects.create(
+        Product.objects.create(
             category=category, name='Скрытый', slug='skrytyj', price='500.00', available=False
         )
         response = client.get(reverse('store:product_list'))

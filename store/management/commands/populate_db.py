@@ -1,6 +1,5 @@
 from django.core.management.base import BaseCommand
 from store.models import Category, Product
-from django.utils.text import slugify
 
 
 class Command(BaseCommand):
@@ -12,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write('Создание категорий...')
-        
+
         # Создаем категории
         categories_data = [
             {
@@ -112,16 +111,16 @@ class Command(BaseCommand):
                 ]
             }
         ]
-        
+
         for cat_data in categories_data:
             category, created = Category.objects.get_or_create(
                 slug=cat_data['slug'],
                 defaults={'name': cat_data['name']}
             )
-            
+
             if created:
                 self.stdout.write(f'Создана категория: {category.name}')
-            
+
             # Создаем товары для категории
             for prod_data in cat_data['products']:
                 product, created = Product.objects.get_or_create(
@@ -133,10 +132,10 @@ class Command(BaseCommand):
                         'available': True
                     }
                 )
-                
+
                 if created:
                     self.stdout.write(f'Создан товар: {product.name}')
-        
+
         self.stdout.write(
             self.style.SUCCESS('База данных успешно заполнена тестовыми данными!')
         )

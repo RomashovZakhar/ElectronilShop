@@ -24,7 +24,7 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'first_name', 'last_name', 'email']
     readonly_fields = ['created', 'updated']
     inlines = [OrderItemInline]
-    
+
     def get_total_cost(self, obj):
         """Отображает общую стоимость заказа"""
         return obj.get_total_cost()
@@ -40,7 +40,7 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'product', 'price', 'quantity', 'get_cost']
     list_filter = ['order__status']
     search_fields = ['order__user__username', 'product__name']
-    
+
     def get_cost(self, obj):
         """Отображает стоимость элемента заказа"""
         return obj.get_cost()
