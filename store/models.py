@@ -37,6 +37,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, verbose_name='Slug')
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True, verbose_name='Изображение')
+    image_url = models.URLField(blank=True, verbose_name='URL изображения')
     description = models.TextField(blank=True, verbose_name='Описание')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     available = models.BooleanField(default=True, verbose_name='Доступен')
