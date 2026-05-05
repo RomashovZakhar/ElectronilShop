@@ -1,0 +1,74 @@
+КРАТКИЙ ЗАПУСК ПРОЕКТА (Windows)
+0) Требования
+- Установленный Python 3.10+ (рекомендуется 3.11)
+- Установленный PostgreSQL 14/15/16 (любой из них)
+- (Опционально) Docker Desktop, если хотите поднять БД через контейнер
+1) Клонировать проект (если нужно)
+- Откройте PowerShell или cmd
+- Перейдите в папку проекта (например: C:\Users\<User>\Desktop\django)
+2) Виртуальное окружение
+- Создать venv:
+  python -m venv venv
+- Активировать venv:
+  venv\Scripts\activate
+3) Установить зависимости
+  pip install -r requirements.txt
+4A) Настроить PostgreSQL (нативная установка на Windows)
+- Установите PostgreSQL с официального сайта (включите утилиту psql)
+- Запустите службу PostgreSQL через "Службы" (Services) или перезагрузите ПК (служба обычно стартует сама)
+- Откройте psql (из меню Пуск или через команду):
+  "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h 127.0.0.1 -p 5432
+  (Если путь другой — скорректируйте версию/путь)
+- В консоли psql выполните (пароль в settings.py: postgres):
+  ALTER USER postgres WITH PASSWORD 'postgres';
+  CREATE DATABASE electronics_store_db;
+  \q
+4B) Альтернатива: PostgreSQL в Docker (если нет нативной установки)
+- Откройте PowerShell (с правами пользователя)
+  docker run --name pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=electronics_store_db -p 5432:5432 -d postgres:16
+- Убедитесь, что контейнер запущен: docker ps
+5) Применить миграции
+  python manage.py migrate
+6) Создать суперпользователя (по запросу введите логин/email/пароль)
+  python manage.py createsuperuser
+7) (Опционально) Заполнить тестовыми данными
+  python manage.py populate_db
+8) Запустить сервер разработки
+  python manage.py runserver
+9) Открыть сайт
+- Перейдите в браузере: http://127.0.0.1:8000/
+- Админ-панель: http://127.0.0.1:8000/admin/
+Параметры БД по умолчанию (electronics_store/settings.py → DATABASES):
+- NAME: electronics_store_db
+- USER: postgres
+- PASSWORD: postgres
+- HOST: localhost
+- PORT: 5432
+Если у вас другие USER/PASSWORD — измените их в electronics_store\settings.py.
+Частые ошибки и решения (Windows)
+- Ошибка: connection refused / не удаётся подключиться к 5432
+  * Проверьте, что служба PostgreSQL запущена (services.msc)
+  * Проверьте, что порт 5432 свободен
+  * Для Docker-варианта: убедитесь, что контейнер работает (docker ps)
+- Ошибка: команда psql не найдена
+  * Запустите psql по полному пути, например:
+    "C:\\Program Files\\PostgreSQL\\16\\bin\\psql.exe" -U postgres -h 127.0.0.1 -p 5432
+  * Или добавьте папку bin PostgreSQL в переменную PATH и перезапустите PowerShell/cmd
+- Ошибка миграций
+  * Выполните команды:
+    python manage.py makemigrations
+    python manage.py migrate
+- Проблемы с активацией venv в PowerShell (скрипты запрещены)
+  * Запустите PowerShell от имени администратора и разрешите выполнение скриптов:
+    Set-ExecutionPolicy RemoteSigned
+  * Подтвердите изменение и заново активируйте venv:
+    venv\Scripts\activate
+Где что находится
+- Главные настройки: electronics_store\settings.py
+- Маршруты: electronics_store\urls.py
+- Приложения: store (товары), cart (корзина), orders (заказы)
+- Шаблоны: templates\
+- Статика: static\
+- Медиа (изображения): media\
+Готово: после запуска сервера страница каталога доступна по http://127.0.0.1:8000/
+Админ-панель — http://127.0.0.1:8000/admin/

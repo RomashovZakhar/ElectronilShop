@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}Товары{% endif %} - Электроника
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Боковая панель с категориями -->
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Категории</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'store:product_list' %}" class="text-decoration-none">
+                            {% if not category %}
+                                <strong>Все товары</strong>
+                            {% else %}
+                                Все товары
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% for c in categories %}
+                        <li class="list-group-item">
+                            <a href="{{ c.get_absolute_url }}" class="text-decoration-none">
+                                {% if category.slug == c.slug %}
+                                    <strong>{{ c.name }}</strong>
+                                {% else %}
+                                    {{ c.name }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Основной контент с товарами -->
+    <div class="col-md-9">
+        {% if category %}
+            <h2 class="mb-4">{{ category.name }}</h2>
+        {% else %}
+            <h2 class="mb-4">Все товары</h2>
+        {% endif %}
+        
+        {% if products %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for product in products %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text text-muted">{{ product.description|truncatewords:20 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="product-price">{{ product.price }} ₽</span>
+                                    {% if user.is_authenticated %}
+                                        <a href="{% url 'cart:cart_add' product.id %}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-cart-plus"></i> В корзину
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-sign-in-alt"></i> Войти
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-outline-secondary btn-sm w-100">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if products.has_other_pages %}
+                <nav aria-label="Навигация по страницам" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}">Предыдущая</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for num in products.paginator.page_range %}
+                            {% if products.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}">Следующая</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">Товары не найдены</h4>
+                <p class="text-muted">В данной категории пока нет товаров.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

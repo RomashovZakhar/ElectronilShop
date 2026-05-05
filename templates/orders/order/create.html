@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Оформление заказа - Электроника{% endblock %}
+
+{% block content %}
+<h1 class="mb-4"><i class="fas fa-credit-card"></i> Оформление заказа</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Данные для доставки</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.phone|as_crispy_field }}
+                        </div>
+                    </div>
+                    {{ form.address|as_crispy_field }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.city|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.postal_code|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check"></i> Подтвердить заказ
+                        </button>
+                        <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Вернуться в корзину
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Ваш заказ</h5>
+            </div>
+            <div class="card-body">
+                {% for item in cart.items.all %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                        <span>{{ item.get_cost }} ₽</span>
+                    </div>
+                {% endfor %}
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Итого:</strong>
+                    <strong class="product-price">{{ cart.get_total_price }} ₽</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
