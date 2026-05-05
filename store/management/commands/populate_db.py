@@ -132,10 +132,17 @@ class Command(BaseCommand):
                 )
                 if created:
                     self.stdout.write(f'  Создан товар: {product.name}')
-                elif not product.image_url:
-                    product.image_url = prod_data['image_url']
-                    product.save()
-                    self.stdout.write(f'  Обновлен URL картинки: {product.name}')
+                else:
+                    changed = False
+                    if not product.image_url:
+                        product.image_url = prod_data['image_url']
+                        changed = True
+                    if product.image:
+                        product.image = ''
+                        changed = True
+                    if changed:
+                        product.save()
+                        self.stdout.write(f'  Обновлен товар: {product.name}')
 
         self.stdout.write(
             self.style.SUCCESS('База данных успешно заполнена тестовыми данными!')
