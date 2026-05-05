@@ -146,16 +146,17 @@ class Command(BaseCommand):
 
                 if created:
                     self.stdout.write(f'Создан товар: {product.name}')
-                    if prod_data.get('image'):
-                        try:
-                            image_data = download_image(prod_data['image'])
-                            filename = f'{product.slug}.jpg'
-                            product.image.save(filename, image_data, save=True)
-                            self.stdout.write('  → картинка загружена')
-                        except Exception as e:
-                            self.stdout.write(self.style.WARNING(
-                                f'  → не удалось загрузить картинку: {e}'
-                            ))
+
+                if prod_data.get('image') and not product.image:
+                    try:
+                        image_data = download_image(prod_data['image'])
+                        filename = f'{product.slug}.jpg'
+                        product.image.save(filename, image_data, save=True)
+                        self.stdout.write(f'  → картинка загружена: {product.name}')
+                    except Exception as e:
+                        self.stdout.write(self.style.WARNING(
+                            f'  → не удалось загрузить картинку: {e}'
+                        ))
 
         self.stdout.write(
             self.style.SUCCESS('База данных успешно заполнена тестовыми данными!')
