@@ -1,5 +1,16 @@
+import urllib.request
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from store.models import Category, Product
+
+
+def download_image(url):
+    """Скачивает изображение по URL и возвращает ContentFile."""
+    req = urllib.request.Request(url + '?w=800&q=80&auto=format', headers={
+        'User-Agent': 'Mozilla/5.0'
+    })
+    with urllib.request.urlopen(req, timeout=10) as response:
+        return ContentFile(response.read())
 
 
 class Command(BaseCommand):
@@ -20,21 +31,21 @@ class Command(BaseCommand):
                 'products': [
                     {
                         'name': 'MacBook Pro 13"',
-                        'description': 'Мощный ноутбук от Apple с процессором M2, 8 ГБ RAM и 256 ГБ SSD. Идеален для работы и творчества.',
+                        'description': 'Мощный ноутбук от Apple с процессором M2, 8 ГБ RAM и 256 ГБ SSD.',
                         'price': 129999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8'
                     },
                     {
                         'name': 'Dell XPS 15',
-                        'description': 'Премиальный ноутбук с 15.6" дисплеем, Intel Core i7, 16 ГБ RAM и 512 ГБ SSD. Отличный выбор для профессионалов.',
+                        'description': 'Премиальный ноутбук с 15.6" дисплеем и Intel Core i7.',
                         'price': 159999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1593642634367-d91a135587b5'
                     },
                     {
                         'name': 'Lenovo ThinkPad X1 Carbon',
-                        'description': 'Легкий и прочный бизнес-ноутбук с 14" дисплеем, Intel Core i5, 8 ГБ RAM и 256 ГБ SSD.',
+                        'description': 'Легкий бизнес-ноутбук с отличной автономностью.',
                         'price': 89999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1587614382346-4ec70e388b28'
                     }
                 ]
             },
@@ -44,21 +55,21 @@ class Command(BaseCommand):
                 'products': [
                     {
                         'name': 'iPhone 15 Pro',
-                        'description': 'Новейший iPhone с процессором A17 Pro, 6.1" дисплеем и тройной камерой. Максимальная производительность.',
+                        'description': 'Флагман Apple с процессором A17 Pro.',
                         'price': 99999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1695048133142-1a20484f4f7f'
                     },
                     {
                         'name': 'Samsung Galaxy S24',
-                        'description': 'Флагманский Android-смартфон с 6.2" дисплеем, Snapdragon 8 Gen 3 и отличной камерой.',
+                        'description': 'Android-флагман с отличной камерой.',
                         'price': 89999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf'
                     },
                     {
                         'name': 'Google Pixel 8',
-                        'description': 'Смартфон с лучшей камерой и чистой Android-системой. 6.2" дисплей и Tensor G3 процессор.',
+                        'description': 'Лучший камерофон на чистом Android.',
                         'price': 79999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1695900119230-b0dff78eaef5'
                     }
                 ]
             },
@@ -68,21 +79,21 @@ class Command(BaseCommand):
                 'products': [
                     {
                         'name': 'iPad Pro 12.9"',
-                        'description': 'Мощный планшет с 12.9" дисплеем, процессором M2 и поддержкой Apple Pencil. Идеален для творчества.',
+                        'description': 'Планшет с процессором M2 и большим экраном.',
                         'price': 149999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1585790050230-5dd28404ccb9'
                     },
                     {
                         'name': 'Samsung Galaxy Tab S9',
-                        'description': 'Android-планшет с 11" дисплеем, Snapdragon 8 Gen 2 и S Pen в комплекте.',
+                        'description': 'Android-планшет с S Pen.',
                         'price': 69999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1609081219090-a6d81d3085bf'
                     },
                     {
                         'name': 'Microsoft Surface Pro 9',
-                        'description': 'Гибридный планшет-ноутбук с 13" дисплеем, Intel Core i5 и Windows 11.',
+                        'description': 'Гибрид планшета и ноутбука.',
                         'price': 129999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1518779578993-ec3579fee39f'
                     }
                 ]
             },
@@ -92,21 +103,21 @@ class Command(BaseCommand):
                 'products': [
                     {
                         'name': 'AirPods Pro',
-                        'description': 'Беспроводные наушники с активным шумоподавлением и пространственным звуком.',
+                        'description': 'Наушники с шумоподавлением.',
                         'price': 24999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1588423771073-b8903fbb85b5'
                     },
                     {
                         'name': 'Samsung Galaxy Watch 6',
-                        'description': 'Умные часы с круглосуточным мониторингом здоровья и множеством функций.',
+                        'description': 'Умные часы для здоровья.',
                         'price': 29999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b'
                     },
                     {
                         'name': 'Logitech MX Master 3S',
-                        'description': 'Беспроводная мышь для профессионалов с точным сенсором и эргономичным дизайном.',
+                        'description': 'Профессиональная беспроводная мышь.',
                         'price': 8999.00,
-                        'image': None
+                        'image': 'https://images.unsplash.com/photo-1587829741301-dc798b83add3'
                     }
                 ]
             }
@@ -135,6 +146,16 @@ class Command(BaseCommand):
 
                 if created:
                     self.stdout.write(f'Создан товар: {product.name}')
+                    if prod_data.get('image'):
+                        try:
+                            image_data = download_image(prod_data['image'])
+                            filename = f'{product.slug}.jpg'
+                            product.image.save(filename, image_data, save=True)
+                            self.stdout.write('  → картинка загружена')
+                        except Exception as e:
+                            self.stdout.write(self.style.WARNING(
+                                f'  → не удалось загрузить картинку: {e}'
+                            ))
 
         self.stdout.write(
             self.style.SUCCESS('База данных успешно заполнена тестовыми данными!')
