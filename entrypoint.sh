@@ -7,6 +7,9 @@ python manage.py migrate --no-input
 echo "Collecting static files..."
 python manage.py collectstatic --no-input
 
+echo "Populating database with initial data..."
+python manage.py populate_db
+
 echo "Starting gunicorn..."
 exec gunicorn electronics_store.wsgi:application \
     --bind 0.0.0.0:8000 \
