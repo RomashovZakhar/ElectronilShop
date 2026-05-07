@@ -134,10 +134,26 @@ class Command(BaseCommand):
                     self.stdout.write(f'  Создан товар: {product.name}')
                 else:
                     changed = False
-                    if not product.image_url:
-                        product.image_url = prod_data['image_url']
+                    new_image_url = prod_data.get('image_url', '')
+                    if new_image_url and product.image_url != new_image_url:
+                        product.image_url = new_image_url
                         changed = True
-                    if product.image:
+
+                    new_description = prod_data.get('description', '')
+                    if product.description != new_description:
+                        product.description = new_description
+                        changed = True
+
+                    new_price = prod_data.get('price')
+                    if new_price is not None and product.price != new_price:
+                        product.price = new_price
+                        changed = True
+
+                    if product.available is not True:
+                        product.available = True
+                        changed = True
+
+                    if new_image_url and product.image:
                         product.image = ''
                         changed = True
                     if changed:
