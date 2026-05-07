@@ -70,6 +70,7 @@ class Command(BaseCommand):
                         'description': 'Планшет с процессором M2 и большим экраном.',
                         'price': 149999.00,
                         'image_url': 'https://store123.ru/upload/rbs.moyskladstocks/files/0e709015-bfa3-415e-aa02-6b93d8f4fb71/462cc94b2cd8d6915c20b2c8f20c1a5d/3de/rk3v4r3no638khnxpntsbj0wwhi0pvh0.jpg',
+                    },
                     {
                         'name': 'Samsung Galaxy Tab S9',
                         'description': 'Android-планшет с S Pen.',
